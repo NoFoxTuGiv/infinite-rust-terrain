@@ -1,0 +1,7 @@
+[package]
+name = "infinite_rust_terrain"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+nannou = "0.18"
