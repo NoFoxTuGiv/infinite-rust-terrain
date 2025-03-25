@@ -20,6 +20,8 @@ fn main() {
         .run();
 }
 
+// Equivalent to Processing setup() function.
+// Provides a set of global variables for the terain.
 fn model(_app: &App) -> Model {
     Model {
         terrain: [[0.0; ROWS]; COLS],
@@ -30,13 +32,14 @@ fn model(_app: &App) -> Model {
 
 fn update(_app: &App, model: &mut Model, _update: Update) {
     // Scroll vertically (Y axis)
-    model.flying += 0.1;
+    model.flying += 0.1; // Set the scroll speed.
     let mut x_off = 0.0;
     
     for x in 0..COLS {
-        let mut y_off = model.flying;
+        let mut y_off = model.flying; // Scroll by the scroll speed.
         for y in 0..ROWS {
-            let noise_val = model.perlin.get([x_off as f64, y_off as f64]);
+            // Sample 2D Perlin noise (returns [-1, 1], mapped to [-100, 100])
+            let noise_val = model.perlin.get([x_off, y_off as f64]);
             model.terrain[x][y] = map_range(noise_val as f32, -1.0, 1.0, -100.0, 100.0);
             y_off += 0.1;
         }
