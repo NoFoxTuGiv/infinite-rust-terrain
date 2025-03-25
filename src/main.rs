@@ -53,7 +53,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
     
     // Simple rotation - just around X axis
     let transform = Mat4::from_rotation_x(PI / 3.0)
-        * Mat4::from_rotation_z(PI / 15.0)
+        * Mat4::from_rotation_z(PI / 36.0)
         * Mat4::from_translation(vec3(-W / 2.0, -H / 1.2, 0.0));
     
     for y in 0..ROWS-1 {
