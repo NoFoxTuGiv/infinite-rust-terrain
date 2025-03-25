@@ -1,8 +1,8 @@
 use nannou::noise::{NoiseFn, Perlin};
 use nannou::prelude::*;
 
-const W: f32 = 960.0;
-const H: f32 = 900.0;
+const W: f32 = 1000.0;
+const H: f32 = 2000.0;
 const SCALE: f32 = 20.0;
 const COLS: usize = (W / SCALE) as usize;
 const ROWS: usize = (H / SCALE) as usize;
@@ -29,18 +29,18 @@ fn model(_app: &App) -> Model {
 }
 
 fn update(_app: &App, model: &mut Model, _update: Update) {
-    // Calculate Z-position
-    model.flying -= 0.1;
-    let mut y_off = model.flying;
+    // Scroll vertically (Y axis)
+    model.flying += 0.1;
+    let mut x_off = 0.0;
     
-    for y in 0..ROWS {
-        let mut x_off = 0.0;
-        for x in 0..COLS {
+    for x in 0..COLS {
+        let mut y_off = model.flying;
+        for y in 0..ROWS {
             let noise_val = model.perlin.get([x_off as f64, y_off as f64]);
             model.terrain[x][y] = map_range(noise_val as f32, -1.0, 1.0, -100.0, 100.0);
-            x_off += 0.1;
+            y_off += 0.1;
         }
-        y_off += 0.1;
+        x_off += 0.1;
     }
 }
 
@@ -51,10 +51,9 @@ fn view(app: &App, model: &Model, frame: Frame) {
     let purple = srgba(150.0/255.0, 0.0, 200.0/255.0, 1.0);
     let turquoise = srgba(64.0/255.0, 224.0/255.0, 208.0/255.0, 1.0);
     
-    // Create a transform for the entire scene
-    let transform = Mat4::from_scale(vec3(1.0, 1.0, 1.0))
-        * Mat4::from_rotation_x(PI / 3.0)
-        * Mat4::from_translation(vec3(-W / 2.0 + 10.0, -H / 2.0, 0.0));
+    // Simple rotation - just around X axis
+    let transform = Mat4::from_rotation_x(PI / 3.0)
+        * Mat4::from_translation(vec3(-W / 2.0, -H / 1.2, 0.0));
     
     for y in 0..ROWS-1 {
         let mut vertices = Vec::new();
@@ -85,7 +84,6 @@ fn view(app: &App, model: &Model, frame: Frame) {
             colors.push(stroke_color);
         }
         
-        // Draw as a line strip
         draw.polyline()
             .weight(1.0)
             .points_colored(vertices.into_iter().zip(colors.into_iter()));
