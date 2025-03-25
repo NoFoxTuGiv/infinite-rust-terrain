@@ -1,8 +1,8 @@
 use nannou::noise::{NoiseFn, Perlin};
 use nannou::prelude::*;
 
-const W: f32 = 1000.0;
-const H: f32 = 2000.0;
+const W: f32 = 1800.0;
+const H: f32 = 1500.0;
 const SCALE: f32 = 20.0;
 const COLS: usize = (W / SCALE) as usize;
 const ROWS: usize = (H / SCALE) as usize;
@@ -53,6 +53,7 @@ fn view(app: &App, model: &Model, frame: Frame) {
     
     // Simple rotation - just around X axis
     let transform = Mat4::from_rotation_x(PI / 3.0)
+        * Mat4::from_rotation_z(PI / 15.0)
         * Mat4::from_translation(vec3(-W / 2.0, -H / 1.2, 0.0));
     
     for y in 0..ROWS-1 {
